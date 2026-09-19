@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cinvana-discord-engine"
+version = "0.1.0"
+description = "Topology-first Discord server engine for CinvanaAI"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+discord = ["discord.py>=2.4"]
+test = ["pytest>=8"]
+
+[project.scripts]
+cinvana-discord-engine = "discord_engine.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["discord_engine*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
