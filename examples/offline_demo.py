@@ -8,6 +8,7 @@ from discord_engine.db import EngineDatabase
 from discord_engine.repository import Repository
 from discord_engine.ce_client import CEChunk
 from discord_engine.projection import project_chunks
+from discord_engine.reconciler import plan_publication_queue
 
 
 def demonstrate(root):
@@ -19,7 +20,12 @@ def demonstrate(root):
         digest=hashlib.sha256(text.encode()).hexdigest();day=date(2026,1,n)
         chunks.append(CEChunk(message_id=f'message-{n}',result_id=f'result-{n}',audience='private',chunk_index=1,start=0,end=len(text),max_chars=2000,source={'kind':'source_revision','id':f'revision-{n}','sha256':digest},content=text,content_sha256=digest,chat_id='synthetic-workshop',position=n,speaker='User',message_timestamp=f'{day.isoformat()}T12:00:00+00:00',day=day))
     report=project_chunks(repo,guild_key='demo',source_system='synthetic-ce',start=date(2026,1,1),end=date(2026,1,2),chunks=chunks);connection.commit()
-    result={'mode':'Synthetic CE chunks; actual archive projection','source_messages':[x.content for x in chunks],'projection':report.to_dict(),'publication_paused':repo.is_paused('publication'),'remaining_actions':repo.remaining_actions('demo'),'sample':repo.calendar_sample('demo',5),'discord_calls':0}
+    planned = plan_publication_queue(repo, guild_key='demo');connection.commit()
+    operations = [{'type': row['operation_type'], 'priority': row['priority'],
+                   'payload': json.loads(row['payload_json'])} for row in connection.execute(
+                   "SELECT * FROM publication_queue ORDER BY priority, sequence")]
+    assert repo.is_paused('publication') and operations
+    result={'mode':'Synthetic CE chunks; actual archive projection','source_messages':[x.content for x in chunks],'projection':report.to_dict(),'publication_paused':repo.is_paused('publication'),'remaining_actions':repo.remaining_actions('demo'),'sample':repo.calendar_sample('demo',5),'queue_plan':planned.to_dict(),'queue_summary':repo.queue_summary('demo'),'operations':operations,'discord_calls':0}
     connection.close();return result
 
 

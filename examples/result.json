@@ -45,5 +45,94 @@
       "created_messages": 0
     }
   ],
+  "queue_plan": {
+    "guild_key": "demo",
+    "generation_id": 1,
+    "canceled_stale_operations": 0,
+    "enqueued_operations": 8,
+    "relinked_slots": 0,
+    "containers_checked": 2,
+    "operations_by_type": {
+      "CREATE_CATEGORY": 1,
+      "CREATE_CHANNEL": 1,
+      "CREATE_THREAD_STARTER": 2,
+      "CREATE_THREAD": 2,
+      "CREATE_MESSAGE": 2
+    }
+  },
+  "queue_summary": {
+    "pending": 8
+  },
+  "operations": [
+    {
+      "type": "CREATE_CATEGORY",
+      "priority": 10,
+      "payload": {
+        "category_key": "demo:category:year:2026"
+      }
+    },
+    {
+      "type": "CREATE_CHANNEL",
+      "priority": 20,
+      "payload": {
+        "category_key": "demo:category:year:2026",
+        "channel_key": "demo:channel:month:2026-01"
+      }
+    },
+    {
+      "type": "CREATE_THREAD_STARTER",
+      "priority": 30,
+      "payload": {
+        "channel_key": "demo:channel:month:2026-01",
+        "message_key": "demo:message:day:2026-01-01:starter",
+        "thread_key": "demo:thread:day:2026-01-01"
+      }
+    },
+    {
+      "type": "CREATE_THREAD_STARTER",
+      "priority": 30,
+      "payload": {
+        "channel_key": "demo:channel:month:2026-01",
+        "message_key": "demo:message:day:2026-01-02:starter",
+        "thread_key": "demo:thread:day:2026-01-02"
+      }
+    },
+    {
+      "type": "CREATE_THREAD",
+      "priority": 31,
+      "payload": {
+        "channel_key": "demo:channel:month:2026-01",
+        "starter_message_key": "demo:message:day:2026-01-01:starter",
+        "thread_key": "demo:thread:day:2026-01-01"
+      }
+    },
+    {
+      "type": "CREATE_THREAD",
+      "priority": 31,
+      "payload": {
+        "channel_key": "demo:channel:month:2026-01",
+        "starter_message_key": "demo:message:day:2026-01-02:starter",
+        "thread_key": "demo:thread:day:2026-01-02"
+      }
+    },
+    {
+      "type": "CREATE_MESSAGE",
+      "priority": 51,
+      "payload": {
+        "container_key": "demo:thread:day:2026-01-01",
+        "message_key": "demo:message:ce:message-1:private:1",
+        "slot_index": 1
+      }
+    },
+    {
+      "type": "CREATE_MESSAGE",
+      "priority": 51,
+      "payload": {
+        "container_key": "demo:thread:day:2026-01-02",
+        "message_key": "demo:message:ce:message-2:private:1",
+        "slot_index": 1
+      }
+    }
+  ],
   "discord_calls": 0
 }
